@@ -2,21 +2,12 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECRET_KEY = 'f!@rvh$0i=v+khc46832923@%og85zia!4ocp*x3*!0vr_0d1w'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 # DEBUG = True
-
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 # ALLOWED_HOSTS = []
 
@@ -45,11 +36,11 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'auth/users/reset_password_confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'auth/users/reset_username_confirm/{uid}/{token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}/',
-    'USER_CREATE_PASSWORD_RETYPE ': True,
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user_create': 'mainapp.serializers.UserCreateSerializer',
+    },
 }
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -126,6 +117,8 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
+
+AUTH_USER_MODEL = 'mainapp.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
